@@ -1,9 +1,8 @@
 import datetime
-import io
-import json
 import os
 
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
+
 app = Flask(__name__)
 
 
@@ -12,9 +11,13 @@ def index():
     age = int((datetime.date.today() - datetime.date(1995, 4, 22)).days / 365)
     return render_template('home.html', age=age)
 
+
 @app.route('/resume')
 def resume():
-    return get_static_file('static/resume.pdf')
+    return send_from_directory(
+        get_static_file('static'), filename='resume.pdf', as_attachment=True
+    )
+
 
 @app.errorhandler(404)
 def page_not_found(e):
